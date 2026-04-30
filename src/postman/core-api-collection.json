@@ -1,0 +1,49 @@
+{
+  "info": {
+    "name": "Core API Guardrails",
+    "_postman_id": "aanya-core-api",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Create Post",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"authorId\": 1,\n  \"authorType\": \"USER\",\n  \"content\": \"Test post\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8083/api/posts",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8083",
+          "path": ["api", "posts"]
+        }
+      }
+    },
+    {
+      "name": "Add Comment (BOT)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"authorId\": 2,\n  \"authorType\": \"BOT\",\n  \"content\": \"Nice post\",\n  \"parentCommentId\": null,\n  \"humanUserId\": 1\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8083/api/posts/1/comments",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8083",
+          "path": ["api", "posts", "1", "comments"]
+        }
+      }
+    }
+  ]
+}
