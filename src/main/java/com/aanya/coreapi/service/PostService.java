@@ -20,7 +20,7 @@ public class PostService {
     private final RedisGuardrailService  redis;
     private final NotificationService    notificationService;
 
-    // ─── Create Post ──────────────────────────────────────────────────────────
+
 
     @Transactional
     public PostResponse createPost(CreatePostRequest req) {
@@ -39,17 +39,17 @@ public class PostService {
         return toResponse(post, viralityScore);
     }
 
-    // ─── Like a Post ──────────────────────────────────────────────────────────
+
 
     @Transactional
     public void likePost(Long postId, Long userId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("Post not found: " + postId));
 
-        // Human Like = +20 virality
+
         redis.incrementVirality(postId, 20);
 
-        // Notify post author if it's a different user
+
         if (post.getAuthorType() == Post.AuthorType.USER &&
                 !post.getAuthorId().equals(userId)) {
 
@@ -67,7 +67,7 @@ public class PostService {
             userRepository.findById(authorId)
                     .orElseThrow(() -> new IllegalArgumentException("User not found: " + authorId));
         }
-        // Bot validation can be added similarly
+
     }
 
     private PostResponse toResponse(Post post, Long viralityScore) {

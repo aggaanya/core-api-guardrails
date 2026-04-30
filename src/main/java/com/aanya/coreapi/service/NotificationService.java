@@ -11,11 +11,7 @@ public class NotificationService {
 
     private final RedisGuardrailService redis;
 
-    /**
-     * Called whenever a bot interacts with a user's post.
-     *  - If user is NOT on cooldown → send notification
-     *  - If user IS on cooldown → store in Redis list
-     */
+
     public void handleBotInteractionNotification(Long userId, String message) {
 
         boolean onCooldown = redis.isUserOnNotifCooldown(userId);

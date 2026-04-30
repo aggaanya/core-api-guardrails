@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 public class CreatePostRequest {
     private Long authorId;
-    private Post.AuthorType authorType; // "USER" or "BOT"
+    private Post.AuthorType authorType;
     private String content;
 }

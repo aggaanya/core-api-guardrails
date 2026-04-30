@@ -28,14 +28,14 @@ public class CommentService {
     @Transactional
     public Comment addComment(Long postId, CreateCommentRequest req) {
 
-        // 1. Validate post exists
+
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("Post not found: " + postId));
 
-        // 2. Compute depth
+
         int depth = computeDepth(req.getParentCommentId());
 
-        // 3. Depth limit
+
         if (depth > MAX_DEPTH) {
             throw new DepthLimitException(
                     "Comment thread has reached maximum depth of " + MAX_DEPTH);
@@ -43,12 +43,12 @@ public class CommentService {
 
         boolean isCooldown = false;
 
-        // 4. Bot guardrails
+
         if (req.getAuthorType() == Post.AuthorType.BOT) {
             isCooldown = applyBotGuardrails(postId, req.getAuthorId(), req.getHumanUserId());
         }
 
-        // 5. Save comment (ALWAYS)
+
         Comment comment = Comment.builder()
                 .postId(postId)
                 .authorId(req.getAuthorId())
@@ -60,12 +60,12 @@ public class CommentService {
 
         comment = commentRepository.save(comment);
 
-        // 6. Virality + Notification
+
         if (req.getAuthorType() == Post.AuthorType.BOT) {
 
             redis.incrementVirality(postId, 1);
 
-            // ✅ Only notify if NOT on cooldown
+
             if (!isCooldown && req.getHumanUserId() != null) {
                 notificationService.handleBotInteractionNotification(
                         req.getHumanUserId(),

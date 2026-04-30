@@ -16,7 +16,6 @@ public class RedisGuardrailService {
 
     private final RedisTemplate<String, String> redisTemplate;
 
-    // ─── Key builders (CONSISTENT FORMAT) ───────────────────────────────
 
     public String viralityKey(Long postId) {
         return "post:" + postId + ":virality_score";
@@ -38,7 +37,6 @@ public class RedisGuardrailService {
         return "user:" + userId + ":pending_notifs";
     }
 
-    // ─── Virality Score ─────────────────────────────────────────────────
 
     public void incrementVirality(Long postId, int points) {
         redisTemplate.opsForValue().increment(viralityKey(postId), points);
@@ -49,7 +47,6 @@ public class RedisGuardrailService {
         return val == null ? 0L : Long.parseLong(val);
     }
 
-    // ─── Bot Reply Limit (MAX 100) ─────────────────────────────────────
 
     public boolean tryIncrementBotCount(Long postId) {
         Long newCount = redisTemplate.opsForValue().increment(botCountKey(postId));
@@ -77,7 +74,7 @@ public class RedisGuardrailService {
 
 
 
-    // ─── Notification Cooldown (15 min) ────────────────────────────────
+
 
     public boolean isUserOnNotifCooldown(Long userId) {
         String key = notifCooldownKey(userId);
@@ -88,7 +85,7 @@ public class RedisGuardrailService {
         return Boolean.FALSE.equals(wasSet);
     }
 
-    // ─── Notification Queue ────────────────────────────────────────────
+
 
     public void pushPendingNotification(Long userId, String message) {
         redisTemplate.opsForList().rightPush(pendingNotifsKey(userId), message);
@@ -119,7 +116,6 @@ public class RedisGuardrailService {
             return true; // already on cooldown
         }
 
-        // ✅ SET cooldown ONLY when not present
         redisTemplate.opsForValue().set(key, "1", Duration.ofMinutes(10));
         return false;
     }

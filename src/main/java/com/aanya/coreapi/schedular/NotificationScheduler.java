@@ -32,7 +32,7 @@ public class NotificationScheduler {
         }
 
         for (String key : keys) {
-            // Extract userId from key pattern "user:{id}:pending_notifs"
+
             String[] parts = key.split(":");
             if (parts.length < 3) continue;
 
@@ -41,7 +41,7 @@ public class NotificationScheduler {
 
             if (messages.isEmpty()) continue;
 
-            // Build summary: "Bot X and [N-1] others interacted with your posts."
+
             String first = messages.get(0);
             int others = messages.size() - 1;
 
